@@ -12,11 +12,10 @@ import java.util.List;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private final Authentication authentication;
 
-    public PostService(PostRepository postRepository, Authentication authentication) {
+
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
-        this.authentication = authentication;
     }
 
     public Post createPost(PostRequest input, Authentication authentication){
@@ -33,7 +32,7 @@ public class PostService {
     }
 
     public List<Post> getAllPosts(){
-        return postRepository.getAllPosts();
+        return postRepository.findAll();
     }
 
     public void deletePost(Long id) {

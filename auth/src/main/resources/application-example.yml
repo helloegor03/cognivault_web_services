@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: egorik1234566
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -29,8 +29,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: grokkingb@gmail.com
-    password: ebbo cnvu swcz ecof
+    username: ${SUPPORT_MAIL}
+    password: ${APP_PASSWORD}
     properties:
       mail:
         smtp:
@@ -38,8 +38,10 @@ spring:
           starttls:
             enable: true
 
+  config:
+    import: optional:file:.env[.properties]
 
 token:
   signing:
-    key: gfegkfege435fdkgegrek43rek2ftretregrgerwhgfbg34t3rgf3ffqgfdgwwrewhgfjthkt
+    key: ${JWT_SECRET_KEY}
     lifetime: 3600000
