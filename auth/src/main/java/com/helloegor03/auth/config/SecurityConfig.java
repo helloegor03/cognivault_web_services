@@ -58,17 +58,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-
+                .cors(cors -> {})
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(unauthorizedHandler)
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/auth/**", "/api/test/all").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/posts").permitAll()
+                        .requestMatchers("/posts/**").authenticated()
+                        .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(authenticationJwtTokenFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

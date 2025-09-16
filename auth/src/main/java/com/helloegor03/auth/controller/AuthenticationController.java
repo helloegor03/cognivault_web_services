@@ -1,12 +1,11 @@
 package com.helloegor03.auth.controller;
 
-import com.helloegor03.auth.dto.LoginUserDto;
-import com.helloegor03.auth.dto.RegisterUserDto;
-import com.helloegor03.auth.dto.UserCreatedEvent;
-import com.helloegor03.auth.dto.VerifyUserDto;
+import com.helloegor03.auth.config.JwtUtil;
+import com.helloegor03.auth.dto.*;
 import com.helloegor03.auth.model.User;
 import com.helloegor03.auth.service.AuthenticationService;
 import com.helloegor03.auth.service.UserEventProducer;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final UserEventProducer userEventProducer;
+    private final JwtUtil jwtUtil;
 
-    public AuthenticationController(AuthenticationService authenticationService, UserEventProducer userEventProducer) {
+    public AuthenticationController(AuthenticationService authenticationService, UserEventProducer userEventProducer, JwtUtil jwtUtil) {
         this.authenticationService = authenticationService;
         this.userEventProducer = userEventProducer;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -35,9 +36,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody LoginUserDto input){
-        User user = authenticationService.authenticate(input);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<JwtResponse> loginUser(@RequestBody LoginUserDto input) {
+        Authentication authentication = authenticationService.authenticate(input);
+        String token = jwtUtil.generateToken(authentication);
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     @PostMapping("/verify")
