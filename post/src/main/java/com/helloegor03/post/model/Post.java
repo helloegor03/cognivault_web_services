@@ -11,7 +11,11 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Lob
+    @Column
     private String descripton;
+    @Lob
+    @Column
     private String text;
     private String imageUrl;
     private LocalDate date;
