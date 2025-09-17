@@ -23,9 +23,14 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
 
-  cloud:
-    compatibility-verifier:
-      enabled: false
+cloud:
+  compatibility-verifier:
+    enabled: false
+
+cloudinary:
+  cloud_name: ${YOUR_CLOUDINARY_NAME}
+  api_key: ${YOUR_CLOUDINARY_API_KEY}
+  api_secret: ${YOUR_SECRET}
 
   mail:
     host: smtp.gmail.com

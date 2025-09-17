@@ -6,8 +6,11 @@ import com.helloegor03.post.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
@@ -20,8 +23,12 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody PostRequest input, Authentication authentication) {
-        Post createdPost = postService.createPost(input, authentication);
+    public ResponseEntity<Post> createPost(
+            @RequestPart("post") PostRequest input,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            Authentication authentication
+    ) throws IOException {
+        Post createdPost = postService.createPost(input, authentication, file);
         return ResponseEntity.ok(createdPost);
     }
 
@@ -29,6 +36,13 @@ public class PostController {
     public ResponseEntity<List<Post>> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
+        return postService.getPostById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
