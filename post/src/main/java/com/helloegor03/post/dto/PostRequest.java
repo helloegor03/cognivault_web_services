@@ -2,7 +2,7 @@ package com.helloegor03.post.dto;
 
 public class PostRequest {
     private String name;
-    private String descripton;
+    private String description;
     private String text;
     private String imageUrl;
     private String tag;
@@ -15,12 +15,12 @@ public class PostRequest {
         this.name = name;
     }
 
-    public String getDescripton() {
-        return descripton;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripton(String descripton) {
-        this.descripton = descripton;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getText() {

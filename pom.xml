@@ -10,6 +10,7 @@
   <modules>
     <module>auth</module>
     <module>post</module>
+    <module>sub</module>
 
   </modules>
   <dependencies>

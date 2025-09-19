@@ -1,0 +1,53 @@
+server:
+  port: 8050
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: post-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+cloud:
+  compatibility-verifier:
+    enabled: false
+
+cloudinary:
+  cloud_name: ${YOUR_CLOUDINARY_NAME}
+  api_key: ${YOUR_CLOUDINARY_API_KEY}
+  api_secret: ${YOUR_SECRET}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SUPPORT_EMAIL}
+    password: ${APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  config:
+    import: optional:file:.env[.properties]
+
+token:
+  signing:
+    key: ${JWT_SECRET_KEY}
+    lifetime: 3600000

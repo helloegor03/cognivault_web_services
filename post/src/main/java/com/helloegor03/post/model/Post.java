@@ -13,7 +13,7 @@ public class Post {
     private String name;
     @Lob
     @Column
-    private String descripton;
+    private String description;
     @Lob
     @Column
     private String text;
@@ -48,12 +48,12 @@ public class Post {
         this.name = name;
     }
 
-    public String getDescripton() {
-        return descripton;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripton(String descripton) {
-        this.descripton = descripton;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getText() {

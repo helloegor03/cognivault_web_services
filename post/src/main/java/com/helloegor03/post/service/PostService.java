@@ -2,9 +2,11 @@ package com.helloegor03.post.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.helloegor03.post.dto.PostCreatedEvent;
 import com.helloegor03.post.dto.PostRequest;
 import com.helloegor03.post.model.Post;
 import com.helloegor03.post.repository.PostRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,17 +21,18 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final Cloudinary cloudinary;
+    private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
 
-
-    public PostService(PostRepository postRepository, Cloudinary cloudinary) {
+    public PostService(PostRepository postRepository, Cloudinary cloudinary, KafkaTemplate<String, PostCreatedEvent> kafkaTemplate) {
         this.postRepository = postRepository;
         this.cloudinary = cloudinary;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public Post createPost(PostRequest input, Authentication authentication, MultipartFile file) throws IOException {
         Post post = new Post();
         post.setDate(LocalDate.now());
-        post.setDescripton(input.getDescripton());
+        post.setDescription(input.getDescription());
         post.setName(input.getName());
         post.setTag(input.getTag());
         post.setText(input.getText());
@@ -42,7 +45,18 @@ public class PostService {
             post.setImageUrl(imageUrl);
         }
 
-        return postRepository.save(post);
+        Post saved = postRepository.save(post);
+
+        PostCreatedEvent event = new PostCreatedEvent(
+                saved.getId(),
+                saved.getName(),
+                saved.getDescription(),
+                saved.getTag(),
+                saved.getAuthor()
+        );
+        kafkaTemplate.send("post-created-topic", event);
+
+        return saved;
     }
 
     public List<Post> getAllPosts(){
