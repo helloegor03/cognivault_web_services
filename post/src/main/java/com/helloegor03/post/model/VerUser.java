@@ -12,10 +12,12 @@ public class VerUser {
     private String username;
     private String email;
 
-    private String role;
+    public Long getUserId() {
+        return userId;
+    }
 
-    public String getRole() {
-        return role;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {

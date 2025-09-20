@@ -14,6 +14,9 @@ public class User {
     private String email;
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.ROLE_USER;
+
     @Column(name = "verification_code")
     private String verificationCode;
 
@@ -26,9 +29,18 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = UserRole.ROLE_USER;
     }
 
     public User() {
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     public Long getId() {

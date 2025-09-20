@@ -27,7 +27,7 @@ public class UserEventConsumer {
 
         VerUser verUser = new VerUser();
         verUser.setEmail(email);
-        verUser.setId(userId);
+        verUser.setUserId(userId);
         verUser.setUsername(username);
 
         verUserRepository.save(verUser);
