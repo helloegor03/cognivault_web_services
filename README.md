@@ -5,6 +5,8 @@
 
 <img width="1280" height="695" alt="image" src="https://github.com/user-attachments/assets/5e0f76eb-dea9-490e-a1bf-bc96900da44b" />
 
+<img width="866" height="584" alt="image" src="https://github.com/user-attachments/assets/1361f5ac-a21b-48a5-941e-236fbd4111df" />
+
 ---
 
 ## 🔐 Авторизация и безопасность  
@@ -15,8 +17,6 @@
   пользователь получает на почту одноразовый код и подтверждает им регистрацию.  
 
 <img width="1280" height="689" alt="image" src="https://github.com/user-attachments/assets/abe40684-5af0-4247-8ebb-9741c3f44c26" />  
-
-<img width="866" height="584" alt="image" src="https://github.com/user-attachments/assets/dbaa531d-ba04-4fd3-beb1-1ea1b1d1b554" />
 
 ### 📑 Auth endpoints  
 
