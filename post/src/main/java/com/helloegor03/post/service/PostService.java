@@ -6,32 +6,37 @@ import com.helloegor03.post.dto.PostCreatedEvent;
 import com.helloegor03.post.dto.PostRequest;
 import com.helloegor03.post.model.Post;
 import com.helloegor03.post.repository.PostRepository;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final Cloudinary cloudinary;
     private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+    private final ObjectMapper objectMapper;
+    private final Jedis jedis;
 
-    public PostService(PostRepository postRepository, Cloudinary cloudinary, KafkaTemplate<String, PostCreatedEvent> kafkaTemplate) {
+    public PostService(PostRepository postRepository,
+                       Cloudinary cloudinary,
+                       KafkaTemplate<String, PostCreatedEvent> kafkaTemplate,
+                       ObjectMapper objectMapper) {
         this.postRepository = postRepository;
         this.cloudinary = cloudinary;
         this.kafkaTemplate = kafkaTemplate;
+        this.objectMapper = objectMapper;
+        this.jedis = new Jedis("localhost", 6379);
     }
-    @CachePut(value = "posts", key = "#result.id")
+
     public Post createPost(PostRequest input, Authentication authentication, MultipartFile file) throws IOException {
         Post post = new Post();
         post.setDate(LocalDate.now());
@@ -50,6 +55,9 @@ public class PostService {
 
         Post saved = postRepository.save(post);
 
+        String json = objectMapper.writeValueAsString(saved);
+        jedis.set("posts::" + saved.getId(), json);
+
         PostCreatedEvent event = new PostCreatedEvent(
                 saved.getId(),
                 saved.getName(),
@@ -62,25 +70,31 @@ public class PostService {
         return saved;
     }
 
-    public List<Post> getAllPosts(){
+    public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
-    @CacheEvict(value = "posts", key = "#id")
+
     public void deletePost(Long id) {
         if (!postRepository.existsById(id)) {
             throw new RuntimeException("Post not found with id: " + id);
         }
         postRepository.deleteById(id);
+
+        jedis.del("posts::" + id);
     }
-    @Cacheable(value = "posts", key = "#id")
-    public Optional<Post> getPostById(Long id){
-        if(!postRepository.existsById(id)){
-            throw new RuntimeException("Post not found");
+
+    public Post getPostById(Long id) {
+        try {
+            String json = jedis.get("posts::" + id);
+            if (json != null) {
+                System.out.println("Post fetched from Redis id=" + id);
+                return objectMapper.readValue(json, Post.class); // возвращаем объект из Redis
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return postRepository.findById(id);
+        System.out.println("Fetching post from DB id=" + id);
+        // Если в Редисе нет, то делаем запрос в бд
+        return postRepository.findById(id).orElse(null);
     }
-
-
-
-
 }

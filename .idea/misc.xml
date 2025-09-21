@@ -8,7 +8,13 @@
         <option value="$USER_HOME$/Downloads/auth/pom.xml" />
         <option value="$USER_HOME$/Downloads/post/pom.xml" />
         <option value="$USER_HOME$/Downloads/sub/pom.xml" />
+        <option value="$USER_HOME$/Downloads/gateway/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/gateway/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="temurin-17" project-jdk-type="JavaSDK">
