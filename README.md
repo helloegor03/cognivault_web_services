@@ -27,9 +27,11 @@ Cognivault — это интеллектуальная образователь�
 
 Выдать роль админа можно напрямую SQL-запросом:
 
-UPDATE cogniusers SET role = 'ROLE_ADMIN' WHERE id = 1;
+UPDATE cogniusers 
+SET role = 'ROLE_ADMIN' 
+WHERE id = 1;
 
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/dc61b1f0-baba-4a67-abc5-c8cb09ea8866" />
+<img width="1280" height="693" alt="image" src="https://github.com/user-attachments/assets/33182b96-2cd6-4584-bc83-912c86c73436" />
 
 Изображения хранятся в Cloudinary
 
