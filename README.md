@@ -16,6 +16,8 @@
 
 <img width="1280" height="689" alt="image" src="https://github.com/user-attachments/assets/abe40684-5af0-4247-8ebb-9741c3f44c26" />  
 
+<img width="866" height="584" alt="image" src="https://github.com/user-attachments/assets/dbaa531d-ba04-4fd3-beb1-1ea1b1d1b554" />
+
 ### 📑 Auth endpoints  
 
 | Method | Endpoint        | Description                  | Access     |
