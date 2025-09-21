@@ -108,26 +108,29 @@ Redis для кэширования и ускорения отдачи данн�
 
 🔧 Запуск проекта
 
-1️⃣ Настрой базу данных:
+🔧 Запуск проекта
 
+1️⃣ Настрой базу данных:
+```yaml
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+```
 
 
 2️⃣ Настрой Cloudinary:
-
+```yaml
 cloudinary:
   cloud_name: ${YOUR_CLOUDINARY_NAME}
   api_key: ${YOUR_CLOUDINARY_API_KEY}
   api_secret: ${YOUR_SECRET}
-
+```
 
 3️⃣ Настрой Mail Service (Gmail app password):
-
+```yaml
 mail:
   host: smtp.gmail.com
   port: 587
@@ -139,22 +142,23 @@ mail:
         auth: true
         starttls:
           enable: true
-
+```
 
 4️⃣ Запусти Docker:
-
+```yaml
 docker-compose up -d
-
+```
 
 5️⃣ Собери и запусти микросервисы:
-
+```yaml
 mvn clean install
 mvn spring-boot:run
-
+```
 
 6️⃣ Тестируй API через Postman или установи фронтенд-сервис и запусти:
-
+```yaml
 npm start
+```
 
 🎯 TODO
 Добавить сервис для комментирования.
