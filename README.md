@@ -14,7 +14,8 @@ Cognivault — это интеллектуальная образователь�
 Процесс входа включает в себя прохождение MailService:
 пользователь получает на почту одноразовый код и подтверждает им свою почту.
 <img width="1280" height="689" alt="image" src="https://github.com/user-attachments/assets/abe40684-5af0-4247-8ebb-9741c3f44c26" />
-<img width="1280" height="690" alt="image" src="https://github.com/user-attachments/assets/1d6d6c64-78ac-4dcc-9fb6-2fcb856f7454" />
+<img width="1280" height="341" alt="image" src="https://github.com/user-attachments/assets/805802ef-b9a0-4c9c-a910-e130496fb8a0" />
+
 
 ## auth endpoints
 | Метод | Эндпоинт           | Описание                      | Доступ 
@@ -27,6 +28,12 @@ Cognivault — это интеллектуальная образователь�
 Выдать роль админа можно напрямую SQL-запросом:
 
 UPDATE cogniusers SET role = 'ROLE_ADMIN' WHERE id = 1;
+
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/dc61b1f0-baba-4a67-abc5-c8cb09ea8866" />
+
+Изображения хранятся в Cloudinary
+
+Посты кешируются с помощью Redis
 
 ## post
 | Метод | Эндпоинт           | Описание                      | Доступ 
@@ -96,5 +103,46 @@ Redis для кэширования и ускорения отдачи данн�
 
 Каждый сервис изолирован и имеет свою собственную БД, что соответствует подходу Database per Service.
 
+🔧 Запуск проекта
+1️⃣ Настроить базу данных
+Необходимо создать базу данных PostgreSQL и обновить application.yml:
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
+Так-же необходимо зарегестрироваться в Cloudinary и получить ключ и секрет
+cloudinary:
+  cloud_name: ${YOUR_CLOUDINARY_NAME}
+  api_key: ${YOUR_CLOUDINARY_API_KEY}
+  api_secret: ${YOUR_SECRET}
+
+Для настройки mail-service нужно создать app-password
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SUPPORT_MAIL}
+    password: ${APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            
+2️⃣ Запустите Докер в терминале
+docker-compose up -d
+3️⃣ Запустите все микросервисы
+mvn clean install
+mvn spring-boot:run
+3️⃣ Тестирование API
+Используйте postman или можете установить фронтенд сервис для данного приложения и запустить его с помощью
+npm start
+
+🎯 TODO
+Добавить сервис для комментирования.
+Добавить API Gateway 
+Вынести конфигурации в отдельный сервис
 
