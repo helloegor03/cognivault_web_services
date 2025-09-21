@@ -6,6 +6,9 @@ import com.helloegor03.post.dto.PostCreatedEvent;
 import com.helloegor03.post.dto.PostRequest;
 import com.helloegor03.post.model.Post;
 import com.helloegor03.post.repository.PostRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class PostService {
         this.cloudinary = cloudinary;
         this.kafkaTemplate = kafkaTemplate;
     }
-
+    @CachePut(value = "posts", key = "#result.id")
     public Post createPost(PostRequest input, Authentication authentication, MultipartFile file) throws IOException {
         Post post = new Post();
         post.setDate(LocalDate.now());
@@ -62,14 +65,14 @@ public class PostService {
     public List<Post> getAllPosts(){
         return postRepository.findAll();
     }
-
+    @CacheEvict(value = "posts", key = "#id")
     public void deletePost(Long id) {
         if (!postRepository.existsById(id)) {
             throw new RuntimeException("Post not found with id: " + id);
         }
         postRepository.deleteById(id);
     }
-
+    @Cacheable(value = "posts", key = "#id")
     public Optional<Post> getPostById(Long id){
         if(!postRepository.existsById(id)){
             throw new RuntimeException("Post not found");
