@@ -15,11 +15,14 @@ Cognivault — это интеллектуальная образователь�
 Account service
 Contains general input logic and validation: incomes/expenses items, savings and account settings.
 
-Method	Path	Description	User authenticated	Available from UI
-POST	/auth/register	зарегестрировать пользователя		
-POST	/auth/login	Get авторизовать пользователя	×	×
-POST	/auth/verify	выдача кода подтверждения		×
-POST	/auth/resend	отправить код повторно	×	×
+## auth endpoints
+| Метод | Эндпоинт           | Описание                      | Доступ 
+|--------|-------------------|----------------------------------|----------------|
+| POST   | `/auth/register` | Зарегистрировать пользователя | PermitAll          | 
+| POST   | `/auth/login`    | Авторизовать пользователя     | PermitAll          | 
+| POST   | `/auth/verify`   | Выдача кода подтверждения     | PermitAll          | 
+| POST   | `/auth/resend`   | Отправить код повторно        | PermitAll          | 
+
 
 
 👉 Только пользователи с ролью ROLE_ADMIN могут создавать посты.
